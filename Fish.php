@@ -1,36 +1,34 @@
 <?php
-require_once 'Prototype.php';
 
-class Fish implements Prototype
+class Fish
 {
     public $name;
     private $weight;
     private $color;
     private $length;
-
-
-    public function __construct()
-    {
-    }
-
-    public function clone($name, $color, $weight, $length)
-    {
-        $newFish         = new Fish();
-        $newFish->name   = $name;
-        $newFish->weight = $color;
-        $newFish->color  = $weight;
-        $newFish->length = $length;
-
-        return $newFish;
-    }
+    public static $howManyClones = 0;
 
     public function __clone()
     {
-     $this->name = 'clone1name';
-     $this->length = 'clone1length';
-     $this->weight = 'clone1weight';
-     $this->color = 'clone1color';
+        $this->name   = 'cloneName';
+        $this->length = 'cloneLength';
+        $this->weight = 'cloneWeight';
+        $this->color  = 'cloneColor';
+        ++static::$howManyClones;
     }
 
-    function swim(){}
+    public function isSwim(): bool
+    {
+        return true;
+    }
+
+    public function howManyClones(): int
+    {
+        return static::$howManyClones;
+    }
+
+    public function __destruct()
+    {
+        --static::$howManyClones;
+    }
 }
